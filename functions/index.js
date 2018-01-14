@@ -61,7 +61,7 @@ exports.createUser = functions.firestore
     .onWrite(event => {
         var list = [];
         var db = admin.firestore();
-        if (event.data.previous.exists()) {
+        if (event.data.previous.exists) {
           var newValue = event.data.data();
           var previousValue = event.data.previous.data();
 
