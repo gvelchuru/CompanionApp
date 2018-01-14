@@ -79,7 +79,7 @@ app.post('/sendData',urlencodedParser,function(req,res){
     var nameData=req.body.nameData;
 
     var lat=req.body.lat;
-    var longitude=req.body.long;
+    var long=req.body.long;
     // console.log('lat',parseFloat(lat).toFixed(2));
     // console.log('longitude',parseFloat(longitude).toFixed(2));
     // var loc=new GeoPoint(longitude,lat);
