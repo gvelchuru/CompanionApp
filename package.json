@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/gvelchuru/CompanionApp/issues"
   },
-  "homepage": "https://github.com/gvelchuru/CompanionApp#readme"
+  "homepage": "https://github.com/gvelchuru/CompanionApp#readme",
+  "dependencies": {
+    "firebase": "^4.8.2"
+  }
 }
