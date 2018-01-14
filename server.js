@@ -96,7 +96,7 @@ app.post('/sendData',urlencodedParser,function(req,res){
     var setAda = docRef.set({
         nameData:nameData,
         loc: new firebase.firestore.GeoPoint(parseFloat(lat), parseFloat(long)),
-        destination: new firebase.firestore.GeoPoint(parseFloat(destLat), parseFloat(destLong)),
+        dest: new firebase.firestore.GeoPoint(parseFloat(destLat), parseFloat(destLong)),
         time: time
     });
 
