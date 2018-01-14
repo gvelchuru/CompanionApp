@@ -63,6 +63,7 @@ exports.createUser = functions.firestore
         var db = admin.firestore();
         db.collection("users").get().then(function(findClosest) {
           findClosest.forEach(function(doc) {
+            console.log(doc);
             var dict = doc.data();
             var srcDict = event.data.data();
             var lat1 = srcDict["loc"].latitude;
@@ -75,16 +76,16 @@ exports.createUser = functions.firestore
             lat2 = dict["dest"].latitude;
             lon2 = dict["dest"].longitude;
             var destDistances = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
-            absoluteTime = Date(srcDict.time);
-            buddyTime = Date(dict.time);
+            absoluteTime = new Date(srcDict.time);
+            buddyTime = new Date(dict.time);
             timeDiffs = buddyTime.getTime() - absoluteTime.getTime();
-            clusteredDist = Math.sqrt(Math.pow(srcDistances, 2) + Math.pow(destDistances, 2) + Math.pow(timeDiff, 2));
+            clusteredDist = Math.sqrt(Math.pow(srcDistances, 2) + Math.pow(destDistances, 2) + Math.pow(timeDiffs, 2));
             list.push({name : dict["name"], src : dict["loc"], dest : dict["dest"], srcDistance : srcDistances, destDistance : destDistances, time : dict["time"], timeDiff : timeDiffs, clusteredDistance : clusteredDist});
           });
           list.sort(BuddySort);
-        db.collection("users").doc(event.name).set({
+        db.collection("users").doc(event.params.userId).set({
           orderedCompanions : list,
-        })
+        }, {merge: true});
         });
     });
 
