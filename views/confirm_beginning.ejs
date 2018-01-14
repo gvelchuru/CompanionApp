@@ -46,11 +46,11 @@
 	<script>
 	// $('#countdown').html("8");
 		var countdown=10;
-		setInterval(function(){
+		var timer=setInterval(function(){
 			$('#countdown').html(countdown);
 			countdown--;
 			if(countdown==0){
-				break;
+				clearInterval(timer);
 			}
 		},1000);
 		
