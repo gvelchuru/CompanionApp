@@ -99,9 +99,44 @@ app.post('/sendData', urlencodedParser, function (req, res) {
         time: time
     });
 
-    res.render('test.ejs')
+    // res.render('test.ejs')
+    // res.render('table.ejs',{})
+    res.redirect('table/'+name);
 
 
+});
+
+app.get('/table',function(req,res){
+    var name = req.query.name;
+    var result = null;
+
+    var user_data = db.collection('users').doc(name).get()
+
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                console.log('Document data:', doc.data());
+                // return JSON.stringify(doc.data());
+                console.log('again', doc.data());
+                // return JSON.stringify(doc.data());
+                result = doc.data();
+                console.log('orderedCompanions',result.orderedCompanions);
+                // res.send(result);
+                res.render('table.ejs',{result:result});
+            }
+        }).then(function () {
+            return result;
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+
+    
+});
+
+app.get('/confirm',function(req,res){
+    res.render('confirm.ejs');
 });
 
 app.get('/map', function (req, res) {
