@@ -81,8 +81,8 @@ app.post('/sendData',urlencodedParser,function(req,res){
     var lat=req.body.lat;
     var long=req.body.long;
 
-    var destLat = req.body.destLat;
-    var destLong = req.body.destLong;
+    var destLat = req.body.dest_lat;
+    var destLong = req.body.dest_long;
     // console.log('lat',parseFloat(lat).toFixed(2));
     // console.log('longitude',parseFloat(longitude).toFixed(2));
     // var loc=new GeoPoint(longitude,lat);
