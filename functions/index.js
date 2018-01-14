@@ -58,22 +58,20 @@ function deg2rad(deg) {
 
 exports.createUser = functions.firestore
     .document('users/{userId}')
-    .onWrite(event => {
-        var list = [];
+    .onCreate(event => {
+
         var db = admin.firestore();
-        if (event.data.previous.exists) {
-          var newValue = event.data.data();
-          var previousValue = event.data.previous.data();
-
-          if (Object.is(newValue.loc,previousValue.loc) && Object.is(newValue.dest, previousValue.dest) && Object.is(newValue.time, previousValue.time)) {
-            return;
-          }
-        }
-
-
+        db.collection("users").get().then(function(unsetUpdate) {
+          unsetUpdate.forEach(function (doc) {
+            db.collection("users").doc(doc.id).set({
+              updated : false,
+            }, {merge : true});
+          });
+        });
 
         db.collection("users").get().then(function(findClose) {
           findClose.forEach(function(even) {
+            var list = [];
             db.collection("users").get().then(function(findClosest) {
               findClosest.forEach(function(doc) {
                 var dict = doc.data();
@@ -100,6 +98,7 @@ exports.createUser = functions.firestore
               list.sort(BuddySort);
             db.collection("users").doc(even.id).set({
               orderedCompanions : list,
+              updated : true,
             }, {merge: true});
             });
           });
