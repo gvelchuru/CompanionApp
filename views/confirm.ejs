@@ -43,6 +43,17 @@
 				<label class="f11">Your Name: <%=result.name%></label>
 				<label class="f11">destination Distance: <%=individual.destDistance%></label>
 				<label class="f11">Your Company: <%=individual.name%></label>
+				<div class="f11">Your Company Location:</div>
+				<div>
+					<iframe
+							width="200"
+							height="150"
+							frameborder="0" style="border:0"
+							src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBoWPq50fG8HsJYjpfd73_NHRI53gFbjSs
+						&q=<%=individual.src.latitude%>,<%=individual.src.longitude%>" allowfullscreen>
+					</iframe>
+
+				</div>
 			</div>
 
 

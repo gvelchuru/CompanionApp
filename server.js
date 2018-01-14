@@ -65,9 +65,9 @@ app.post('/sendData', urlencodedParser, function (req, res) {
         time: time
     });
 
-    // res.render('test.ejs')
+    res.render('test.ejs')
     // res.render('table.ejs',{})
-    res.redirect('table/'+name);
+    // res.redirect('table?name'+name);
 
 
 });
