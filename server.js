@@ -101,7 +101,34 @@ app.post('/sendData',urlencodedParser,function(req,res){
 });
 
 app.get('/map',function(req,res){
-    res.render('map.ejs');
+    var name=req.query.name;
+    var result=null;
+    // console.log(name);
+    var user_data = db.collection('users').doc(name).get()
+
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                console.log('Document data:', doc.data());
+                // return JSON.stringify(doc.data());
+                console.log('again',doc.data());
+                // return JSON.stringify(doc.data());
+                result=doc.data()['orderedCompanions'];
+                
+                // res.send(result);
+
+            }
+            console.log('result',result);
+            
+            res.render('map_multiple.ejs',{result:result});
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+
+
+    
 });
 
 app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
