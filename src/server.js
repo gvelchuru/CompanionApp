@@ -17,6 +17,19 @@ firebase.initializeApp(config);
 // database reference point
 var db = firebase.firestore();
 
+app.get('/',function(req,res){
+	db.collection('users').get()
+    .then((snapshot) => {
+        snapshot.forEach((doc) => {
+            console.log(doc.id, '=>', doc.data());
+        });
+    })
+    .catch((err) => {
+        console.log('Error getting documents', err);
+    });
+
+})
+
 // Adds a user to the database
 function addUser(name, location, destination, time) {
     var docRef = db.collection('users').doc(name);
