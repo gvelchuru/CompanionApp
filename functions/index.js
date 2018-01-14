@@ -61,31 +61,34 @@ exports.createUser = functions.firestore
     .onWrite(event => {
         var list = [];
         var db = admin.firestore();
-        db.collection("users").get().then(function(findClosest) {
-          findClosest.forEach(function(doc) {
-            console.log(doc);
-            var dict = doc.data();
-            var srcDict = event.data.data();
-            var lat1 = srcDict["loc"].latitude;
-            var lon1 = srcDict["loc"].longitude;
-            var lat2 = dict["loc"].latitude;
-            var lon2 = dict["loc"].longitude;
-            var srcDistances = getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2);
-            lat1 = srcDict["dest"].latitude;
-            lon1 = srcDict["dest"].longitude;
-            lat2 = dict["dest"].latitude;
-            lon2 = dict["dest"].longitude;
-            var destDistances = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
-            absoluteTime = new Date(srcDict.time);
-            buddyTime = new Date(dict.time);
-            timeDiffs = buddyTime.getTime() - absoluteTime.getTime();
-            clusteredDist = Math.sqrt(Math.pow(srcDistances, 2) + Math.pow(destDistances, 2) + Math.pow(timeDiffs, 2));
-            list.push({name : dict["name"], src : dict["loc"], dest : dict["dest"], srcDistance : srcDistances, destDistance : destDistances, time : dict["time"], timeDiff : timeDiffs, clusteredDistance : clusteredDist});
+        db.collection("users").get().then(function(findClose) {
+          findClose.forEach(function(even) {
+            db.collection("users").get().then(function(findClosest) {
+              findClosest.forEach(function(doc) {
+                var dict = doc.data();
+                var srcDict = even.data();
+                var lat1 = srcDict["loc"].latitude;
+                var lon1 = srcDict["loc"].longitude;
+                var lat2 = dict["loc"].latitude;
+                var lon2 = dict["loc"].longitude;
+                var srcDistances = getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2);
+                lat1 = srcDict["dest"].latitude;
+                lon1 = srcDict["dest"].longitude;
+                lat2 = dict["dest"].latitude;
+                lon2 = dict["dest"].longitude;
+                var destDistances = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
+                absoluteTime = new Date(srcDict.time);
+                buddyTime = new Date(dict.time);
+                timeDiffs = buddyTime.getTime()/(60 * 1000) - absoluteTime.getTime()/(60 * 1000);
+                clusteredDist = Math.sqrt(Math.pow(srcDistances, 2) + Math.pow(destDistances, 2) + Math.pow(timeDiffs, 2));
+                list.push({name : dict["name"], src : dict["loc"], dest : dict["dest"], srcDistance : srcDistances, destDistance : destDistances, time : dict["time"], timeDiff : timeDiffs, clusteredDistance : clusteredDist});
+              });
+              list.sort(BuddySort);
+            db.collection("users").doc(even.id).set({
+              orderedCompanions : list,
+            }, {merge: true});
+            });
           });
-          list.sort(BuddySort);
-        db.collection("users").doc(event.params.userId).set({
-          orderedCompanions : list,
-        }, {merge: true});
         });
     });
 
