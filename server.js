@@ -81,7 +81,7 @@ app.post('/sendData',urlencodedParser,function(req,res){
     var longitude=req.body.long;
     console.log('lat',parseFloat(lat).toFixed(2));
     console.log('longitude',parseFloat(longitude).toFixed(2));
-    // var loc=new GeoPoint(longitude,lat);
+    var loc=new GeoPoint(longitude,lat);
     // var loc=new GeoPoint(123, 123);
     var time=req.body.time;
 
@@ -99,6 +99,10 @@ app.post('/sendData',urlencodedParser,function(req,res){
     res.render('test.ejs')
 
 
+});
+
+app.get('/map',function(req,res){
+    res.render('map.ejs');
 });
 
 app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
