@@ -90,7 +90,7 @@ app.post('/sendData', urlencodedParser, function (req, res) {
 
     var time = req.body.time;
 
-    var docRef = db.collection('users').doc(nameData);
+    var docRef = db.collection('users').doc(name);
 
     var setAda = docRef.set({
         name: name,
