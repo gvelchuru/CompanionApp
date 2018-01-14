@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Table V02</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="public/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="public/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="public/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="public/vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="public/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="public/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="public/css/util_table.css">
+	<link rel="stylesheet" type="text/css" href="public/css/main_table.css">
+<!--===============================================================================================-->
+</head>
+<body>
+
+
+	
+	<div class="limiter">
+		<div class="container-table100">
+			<div class="wrap-table100">
+					<div>Name: <%=result.name%></div>
+					<div class="table">
+
+						<div class="row header">
+							<div class="cell">
+								Name
+							</div>
+							<div class="cell">
+								Date
+							</div>
+							
+							<div class="cell">
+								Distance
+							</div>
+							<div class="cell">
+								Location
+							</div>
+					
+						</div>
+
+
+
+						<% for(var i=0;i<result.orderedCompanions.length;i++ ){%>
+
+
+						<div class="row" onclick="window.location = '/confirm'">
+							<div class="cell" data-title="Name">
+								<%=result.orderedCompanions[i].name;%>
+							</div>
+							<div class="cell" data-title="Date">
+								<%=result.orderedCompanions[i].time;%>
+							</div>
+							<!-- <div class="cell" data-title="Hour">
+								23:30
+							</div> -->
+							<div class="cell" data-title="Distance">
+								<%=result.orderedCompanions[i].srcDistance*1000%>m
+							</div>
+							<div class="cell" data-title="Location">
+								<iframe
+  									width="200"
+  									height="150"
+  									frameborder="0" style="border:0"
+  									src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBoWPq50fG8HsJYjpfd73_NHRI53gFbjSs
+    								&q=<%=result.orderedCompanions[i].src.latitude%>,<%=result.orderedCompanions[i].src.longitude%>" allowfullscreen>
+    							</iframe>
+							</div>
+						</div>
+
+						<% } %>
+
+
+
+
+
+
+
+						<!-- <div class="row">
+							<div class="cell" data-title="Name">
+								Bob
+							</div>
+							<div class="cell" data-title="Date">
+								2018-01-17
+							</div>
+							<div class="cell" data-title="Hour">
+								22:45
+							</div>
+							<div class="cell" data-title="Distance">
+								300m
+							</div>
+							<div class="cell" data-title="Location">
+								<iframe
+  									width="200"
+  									height="150"
+  									frameborder="0" style="border:0"
+  									src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBoWPq50fG8HsJYjpfd73_NHRI53gFbjSs
+    								&q=49.2666885,-123.2515587" allowfullscreen>
+    							</iframe>
+							</div>
+						</div> -->
+
+
+
+
+
+
+						<!-- <div class="row">
+							<div class="cell" data-title="Name">
+								Claire
+							</div>
+							<div class="cell" data-title="Date">
+								2018-01-26
+							</div>
+							<div class="cell" data-title="Hour">
+								23:00
+							</div>
+							<div class="cell" data-title="Distance">
+								300m
+							</div>
+							<div class="cell" data-title="Location">
+								<iframe
+  									width="200"
+  									height="150"
+  									frameborder="0" style="border:0"
+  									src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBoWPq50fG8HsJYjpfd73_NHRI53gFbjSs
+    								&q=47.2666885,-121.2515587" allowfullscreen>
+    							</iframe>
+							</div>
+						</div> -->
+
+					
+
+					</div>
+			</div>
+		</div>
+	</div>
+
+
+	
+
+<!--===============================================================================================-->	
+	<script src="public/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="public/vendor/bootstrap/js/popper.js"></script>
+	<script src="public//bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="public/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="public/js/main_table.js"></script>
+
+</body>
+</html>
