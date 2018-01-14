@@ -55,7 +55,18 @@ function initialize() {
    markers=[["No Result",51.503454,-0.119562],[]];
 
    <% }%>
-   markers=[['Woodward Library',49.264572, -123.247659],['School of Population and Public Health',49.264290, -123.248497],['Urgent Care Centre',49.264278, -123.245621]];
+   markers=[['Alan Turing',49.264572, -123.247659],['Sam Pual',49.264290, -123.248497],['Nick Jackson',49.264278, -123.245621]];
+   for(var i=0;i<markers.length;i++){
+	   	var infoWindowContent = 
+	        '<div class="info_content">' +
+	        '<h3>'+markers[i][0]+'</h3>' +
+	        '<p>Mutual Friend:'+((i+1)*7) +' </p>' +
+	        '<button class="btn-primary" onclick="window.location.href=confirm/'+i+'">Get Accompanied</button>'
+	        '</div>';
+	   	markers[i].push(infoWindowContent)
+   }
+   
+   
    var you=[];
    var you_marker = new google.maps.Marker({
             position: new google.maps.LatLng('<%=result.loc.latitude%>', '<%=result.loc.longitude%>'),
@@ -109,7 +120,7 @@ function initialize() {
         // Allow each marker to have an info window    
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
-                infoWindow.setContent(markers[i][0]);
+                infoWindow.setContent(markers[i][3]);
                 infoWindow.open(map, marker);
             }
         })(marker, i));
