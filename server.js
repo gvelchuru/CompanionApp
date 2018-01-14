@@ -137,7 +137,7 @@ app.get('/map', function (req, res) {
 
 });
 
-app.post('/getClosestUsersTo', urlencodedParser, function (req, res) {
+app.post('/getUserData', urlencodedParser, function (req, res) {
     var name = req.body.name;
     // console.log(req.body);
     // console.log(name);
@@ -157,7 +157,7 @@ app.post('/getClosestUsersTo', urlencodedParser, function (req, res) {
                 // return JSON.stringify(doc.data());
                 console.log('again', doc.data());
                 // return JSON.stringify(doc.data());
-                result = doc.data()['orderedCompanions'];
+                result = doc.data();
                 res.send(result);
             }
         }).then(function () {
