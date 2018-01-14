@@ -75,7 +75,7 @@ app.get('/', function (req, res) {
 // });
 
 app.post('/sendData', urlencodedParser, function (req, res) {
-    var nameData = req.body.nameData;
+    var name = req.body.nameData;
 
     var lat = req.body.lat;
     var long = req.body.long;
