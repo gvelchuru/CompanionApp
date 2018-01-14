@@ -46,11 +46,13 @@ function addUser(name, location, destination, time) {
     });
 }
 
+// Client call for adding a user
 app.get('/adduser', function(req, res) {
-    var name = req.query.user;
+    var user = req.query.user;
     var location = req.query.location;
     var destination = req.query.destination;
     var time = req.query.time;
+
 
     addUser(name, location, destination, time);
 });
@@ -111,7 +113,9 @@ function getClosestUsersTo(name) {
     
     // var closestUsers = user_data;
     // return closestUsers;
-}
+
+})
+
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
 /****************************************************************************************/

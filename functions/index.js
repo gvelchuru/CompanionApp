@@ -37,6 +37,23 @@ admin.initializeApp(functions.config().firebase);
 // // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
 // return event.data.ref.parent.child('uppercase').set(uppercase);
 // });
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1);
+  var a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * Math.PI/180;
+}
 
 
 exports.createUser = functions.firestore
@@ -47,10 +64,32 @@ exports.createUser = functions.firestore
         db.collection("users").get().then(function(findClosest) {
           findClosest.forEach(function(doc) {
             var dict = doc.data();
-            var distLong = dict["loc"].longitude;
-            var srcLong = event.data.data().loc.longitude;
-            list.push({name : dict["name"], srcDistance : distLong - srcLong});
+            var srcDict = event.data.data();
+            var lat1 = srcDict["loc"].latitude;
+            var lon1 = srcDict["loc"].longitude;
+            var lat2 = dict["loc"].latitude;
+            var lon2 = dict["loc"].longitude;
+            var srcDistances = getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2);
+            lat1 = srcDict["dest"].latitude;
+            lon1 = srcDict["dest"].longitude;
+            lat2 = dict["dest"].latitude;
+            lon2 = dict["dest"].longitude;
+            var destDistances = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
+            absoluteTime = Date(srcDict.time);
+            buddyTime = Date(dict.time);
+            timeDiffs = buddyTime.getTime() - absoluteTime.getTime();
+            clusteredDist = Math.sqrt(Math.pow(srcDistances, 2) + Math.pow(destDistances, 2) + Math.pow(timeDiff, 2));
+            list.push({name : dict["name"], src : dict["loc"], dest : dict["dest"], srcDistance : srcDistances, destDistance : destDistances, time : dict["time"], timeDiff : timeDiffs, clusteredDistance : clusteredDist});
           });
-          console.log(list);
+          list.sort(BuddySort);
+        db.collection("users").doc(event.name).set({
+          orderedCompanions : list,
+        })
         });
     });
+
+
+function BuddySort(first, second)
+{
+  return first.clusteredDistance - second.clusteredDistance;
+}
