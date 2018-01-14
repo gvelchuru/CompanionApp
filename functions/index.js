@@ -61,6 +61,14 @@ exports.createUser = functions.firestore
     .onWrite(event => {
         var list = [];
         var db = admin.firestore();
+        var newValue = event.data.data();
+        var previousValue = event.data.previous.data();
+
+        if (Object.is(newValue.loc,previousValue.loc) && Object.is(newValue.dest, previousValue.dest) && Object.is(newValue.time, previousValue.time)) {
+          return;
+        }
+
+
         db.collection("users").get().then(function(findClose) {
           findClose.forEach(function(even) {
             db.collection("users").get().then(function(findClosest) {
