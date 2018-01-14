@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+	div#thanks{
+	position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   font-size: 30px;
+   font-weight: bold;
+       border: 2px solid black;
+}
+.f11{
+	font-size: 17px;
+}
+
+
+</style>
+	</head>
+	<body style="width:100%;height:100%">
+		
+	<div style="background-image: url('./public/images/vancouver.jpg');opacity:0.5;width:100%;height:100%;position:absolute;">
+			
+		
+		<div id="thanks" class="panel panel-default" style="width:500px;">
+		  <div class="panel-heading">Thank you!</div>
+		  <div class="panel-body">
+		  	<p>Your walker will be contacting you soon</p>
+		  	<hr style="color:black">
+			<div>
+				<div>Here is your information</div>
+				<label class="f11">Your Name: <%=result.name%></label>
+				<label class="f11">destination Distance: <%=individual.destDistance%></label>
+				<label class="f11">Your Company: <%=individual.name%></label>
+				<div class="f11">Your Company Location:</div>
+				<div>
+					<iframe
+							width="200"
+							height="150"
+							frameborder="0" style="border:0"
+							src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBoWPq50fG8HsJYjpfd73_NHRI53gFbjSs
+						&q=<%=individual.src.latitude%>,<%=individual.src.longitude%>" allowfullscreen>
+					</iframe>
+
+				</div>
+			</div>
+
+
+		  </div>
+		</div>
+
+	</div>
+	</body>
+
+</html>

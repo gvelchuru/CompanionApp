@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-	
+
 
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,7 +23,7 @@
 
 		<script>
 jQuery(function($) {
-    // Asynchronously Load the map API 
+    // Asynchronously Load the map API
     var script = document.createElement('script');
     script.src = "//maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
     document.body.appendChild(script);
@@ -35,40 +35,99 @@ function initialize() {
     var mapOptions = {
         mapTypeId: 'roadmap'
     };
-                    
+
     // Display a map on the page
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     map.setTilt(45);
-        
+
     // Multiple Markers
     var markers=[];
-   <% for (var i=0;i<result.length;i++){ %>
-   	markers.push(["<%=result[i].name%>",<%=result[i].src.latitude%>,<%=result[i].src.longitude%>]);
+
+   <% orderedCompanions=null;%>
+   <%if(orderedCompanions!=null){%>
+   <% for (var i=0;i<orderedCompanions.length;i++){ %>
+   	markers.push(["<%=orderedCompanions[i].name%>",<%=orderedCompanions[i].src.latitude%>,<%=orderedCompanions[i].src.longitude%>]);
 
 
 
    <% } %>
-   console.log(markers);
+   <%}else{%>
+   markers=[["No Result",51.503454,-0.119562],[]];
+
+   <% }%>
+   markers=[['Alan Turing',49.264572, -123.247659],['Sam Pual',49.264290, -123.248497],['Nick Jackson',49.264278, -123.245621]];
+   for(var i=0;i<markers.length;i++){
+	   	var infoWindowContent =
+	        '<div class="info_content">' +
+	        '<h3>'+markers[i][0]+'</h3>' +
+	        '<p>Mutual Friend:'+((i+1)*7) +' </p>' +
+	        '<button class="btn-primary" onclick="window.location.href=confirm/'+i+'">Get Accompanied</button>'
+	        '</div>';
+	   	markers[i].push(infoWindowContent)
+   }
+
+
+   var you=[];
+   var you_marker = new google.maps.Marker({
+            position: new google.maps.LatLng('<%=result.loc.latitude%>', '<%=result.loc.longitude%>'),
+            icon: 'http://maps.google.com/mapfiles/kml/shapes/man.png',
+            map: map
+          });
+
+		var heatmap = new google.maps.visualization.HeatmapLayer({
+			data: getPoints(src, dest),
+			map: map
+		})
+
+		function toggleHeatmap() {
+			heatmap.setMap(heatmap.getMap() ? null : map);
+		}
+
+		function getPoints(src, dest) {
+			  data = getData(src, dest);
+				predicts = []
+				for (i = 0; i < data.length; i++) {
+					for (j = 0; j < data[i][2]; j++) {
+						predicts.push(new google.maps.LatLng(data[i][0], data[i][1]));
+					}
+				}
+				return predicts;
+		}
+
+   // var locations=[];
+   // <%if(result!=null){%>
+   // <% for (var i=0;i<result.length;i++){ %>
+   // 	locations.push(["<%=result[i].name%>",<%=result[i].src.latitude%>,<%=result[i].src.longitude%>]);
+
+
+
+   // <% } %>
+   // <%}else{%>
+   // locations=[["No Result",51.503454,-0.119562]];
+
+   // <% }%>
+
+   console.log('marker',markers);
     // var markers = [
     //     ['London Eye, London', 51.503454,-0.119562],
     //     ['Palace of Westminster, London', 51.499633,-0.124755]
     // ];
-                        
+
     // Info Window Content
-    var infoWindowContent = [
-        ['<div class="info_content">' +
-        '<h3>London Eye</h3>' +
-        '<p>The London Eye is a giant Ferris wheel situated on the banks of the River Thames. The entire structure is 135 metres (443 ft) tall and the wheel has a diameter of 120 metres (394 ft).</p>' +        '</div>'],
-        ['<div class="info_content">' +
-        '<h3>Palace of Westminster</h3>' +
-        '<p>The Palace of Westminster is the meeting place of the House of Commons and the House of Lords, the two houses of the Parliament of the United Kingdom. Commonly known as the Houses of Parliament after its tenants.</p>' +
-        '</div>']
-    ];
-        
+    // var infoWindowContent = [
+    //     ['<div class="info_content">' +
+    //     '<h3>London Eye</h3>' +
+    //     '<p>The London Eye is a giant Ferris wheel situated on the banks of the River Thames. The entire structure is 135 metres (443 ft) tall and the wheel has a diameter of 120 metres (394 ft).</p>' +        '</div>'],
+    //     ['<div class="info_content">' +
+    //     '<h3>Palace of Westminster</h3>' +
+    //     '<p>The Palace of Westminster is the meeting place of the House of Commons and the House of Lords, the two houses of the Parliament of the United Kingdom. Commonly known as the Houses of Parliament after its tenants.</p>' +
+    //     '</div>']
+    // ];
+
     // Display multiple markers on a map
     var infoWindow = new google.maps.InfoWindow(), marker, i;
-    
-    // Loop through our array of markers & place each one on the map  
+
+    // Loop through our array of markers & place each one on the map
     for( i = 0; i < markers.length; i++ ) {
         var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
         bounds.extend(position);
@@ -77,11 +136,11 @@ function initialize() {
             map: map,
             title: markers[i][0]
         });
-        
-        // Allow each marker to have an info window    
+
+        // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
-                infoWindow.setContent(infoWindowContent[i][0]);
+                infoWindow.setContent(markers[i][3]);
                 infoWindow.open(map, marker);
             }
         })(marker, i));
@@ -95,7 +154,7 @@ function initialize() {
         this.setZoom(14);
         google.maps.event.removeListener(boundsListener);
     });
-    
+
 }
 
 

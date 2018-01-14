@@ -281,35 +281,44 @@
 						<!-- <button class="buttonAmir" type="button" onclick="window.open('https://www.maps.ie/coordinates.html','_blank');"><b>Destination</b></button> -->
 						<!-- <input class="input100" type="text" name="location" placeholder="Location..."> -->
 						Destination:<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-            <input type="hidden" value="desc_lat" id="desc_lat">
-            <input type="hidden" value="desc_long" id="desc_long">
+            <input type="hidden" name="dest_lat" id="dest_lat">
+            <input type="hidden" name="dest_long" id="dest_long">
 					    <!-- <div id="map"></div> -->
 					    <script>
 					    
 					    function init() {
 							var input = document.getElementById('pac-input');
-							// var autocomplete = new google.maps.places.Autocomplete(input);
-							var searchBox = new google.maps.places.SearchBox(input);
 
-							searchBox.addListener('places_changed', function() {
+							 var autocomplete = new google.maps.places.Autocomplete(input);
+//							var searchBox = new google.maps.places.SearchBox(input);
 
-								alert('hello');
-								var places = searchBox.getPlaces();
-							 	// var lat=place.geometry.location.lat();
-							 	// var lon=place.geometry.location.lng();
-							 	places.forEach(function(place){
-							 		if (!place.geometry) {
-						              console.log("Returned place contains no geometry");
-						              return;
-						            }
-						            console.log(place.geometry.location);
-						            var lat=place.geometry.location.lat();
-							 		var lon=place.geometry.location.lng();
-							 		console.log('lat',lat);
-							 		console.log('lon',lon);
-                  $('#dest_lat').val(lat);
-                  $('#dest_long').val(lon);
-							 	});
+							autocomplete.addListener('place_changed', function() {
+
+//								alert('hello');
+								var place = autocomplete.getPlace();
+								console.log('place: ' + place);
+								var lat=place.geometry.location.lat();
+								var lon=place.geometry.location.lng();
+                                console.log(lat);
+                                console.log(lon);
+                                $('#dest_lat').val(lat);
+                                $('#dest_long').val(lon);
+
+
+//							 	places.forEach(function(place){
+//							 		if (!place.geometry) {
+//						              console.log("Returned place contains no geometry");
+//						              return;
+//						            }
+//						            console.log(place.geometry.location);
+//						            var lat=place.geometry.location.lat();
+//							 		var lon=place.geometry.location.lng();
+//							 		console.log('lat', lat);
+//							 		console.log('lon', lon);
+//                  					$('#dest_lat').val(lat);
+//                  					$('#dest_long').val(lon);
+//							 	});
+
 							 	
 							});
 							
