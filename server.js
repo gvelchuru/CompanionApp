@@ -2,7 +2,7 @@ var firebase = require("firebase");
 require('firebase/firestore');
 
 var bodyParser = require('body-parser');
-var GeoPoint = require('geopoint');
+var geopoint = require('geopoint');
 var express = require('express');
 var path = require('path');
 
@@ -16,10 +16,10 @@ var app = express();
 app.use("/public",express.static(__dirname + '/public'));
 app.set('view engine','ejs');
 
-// create application/json parser 
+// create application/json parser
 var jsonParser = bodyParser.json();
- 
-// create application/x-www-form-urlencoded parser 
+
+// create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // Initialize Firebase
 var config = {
@@ -77,21 +77,20 @@ app.get('/',function(req,res){
 
 app.post('/sendData',urlencodedParser,function(req,res){
     var nameData=req.body.nameData;
+
     var lat=req.body.lat;
     var longitude=req.body.long;
-    console.log('lat',parseFloat(lat).toFixed(2));
-    console.log('longitude',parseFloat(longitude).toFixed(2));
-    var loc=new GeoPoint(longitude,lat);
-    // var loc=new GeoPoint(123, 123);
+    // console.log('lat',parseFloat(lat).toFixed(2));
+    // console.log('longitude',parseFloat(longitude).toFixed(2));
+    // var loc=new GeoPoint(longitude,lat);
+
     var time=req.body.time;
 
     var docRef = db.collection('users').doc(nameData);
 
     var setAda = docRef.set({
         nameData:nameData,
-        lat:lat,
-        longitude:longitude,
-        // loc: loc,
+        loc: new firebase.firestore.GeoPoint(parseFloat(lat),parseFloat(long)),
         destination: "destination",
         time: time
     });
@@ -116,24 +115,24 @@ app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
     // console.log(jsonresult);
     // res.send(jsonresult);
     var user_data = db.collection('users').doc(name).get()
-    
-    .then(doc => {
-        if (!doc.exists) {
-            console.log('No such document!');
-        } else {
-            console.log('Document data:', doc.data());
-            // return JSON.stringify(doc.data());
-            console.log('again',doc.data());
-            // return JSON.stringify(doc.data());
-            result=doc.data()['orderedCompanions'];
-            res.send(result);
-        }
-    }).then(function(){
-        return result;
-    })
-    .catch(err => {
-        console.log('Error getting document', err);
-    });
+
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                console.log('Document data:', doc.data());
+                // return JSON.stringify(doc.data());
+                console.log('again',doc.data());
+                // return JSON.stringify(doc.data());
+                result=doc.data()['orderedCompanions'];
+                res.send(result);
+            }
+        }).then(function(){
+            return result;
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
 });
 
 // Gets the array of
@@ -141,7 +140,7 @@ app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
 //     // var doc_result = db.collection('users').doc(name).collection('dest').get();
 //     var result={};
 //     var user_data = db.collection('users').doc(name).get()
-    
+
 //     .then(doc => {
 //         if (!doc.exists) {
 //             console.log('No such document!');
@@ -158,7 +157,7 @@ app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
 //     .catch(err => {
 //         console.log('Error getting document', err);
 //     });
-    
+
 //     // var closestUsers = user_data;
 //     // return closestUsers;
 

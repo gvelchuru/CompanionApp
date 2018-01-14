@@ -75,6 +75,9 @@ exports.createUser = functions.firestore
               findClosest.forEach(function(doc) {
                 var dict = doc.data();
                 var srcDict = even.data();
+                if Object.is(srcDict.name, dict.name) {
+                  continue;
+                }
                 var lat1 = srcDict["loc"].latitude;
                 var lon1 = srcDict["loc"].longitude;
                 var lat2 = dict["loc"].latitude;
