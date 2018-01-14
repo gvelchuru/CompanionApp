@@ -38,41 +38,7 @@ var db = firebase.firestore();
 app.get('/', function (req, res) {
     // res.sendFile(path.join(__dirname + '/test.html'));
     res.render('index.ejs');
-})
-
-// app.get('/',function(req,res){
-//  db.collection('users').get()
-//     .then((snapshot) => {
-//         snapshot.forEach((doc) => {
-//             console.log(doc.id, '=>', doc.data());
-//         });
-//     })
-//     .catch((err) => {
-//         console.log('Error getting documents', err);
-//     });
-// })
-
-// Adds a user to the database
-// function addUser(name, location, destination, time) {
-//     var docRef = db.collection('users').doc(name);
-
-//     var setAda = docRef.set({
-//         location: location,
-//         destination: destination,
-//         time: time
-//     });
-// }
-
-// // Client call for adding a user
-// app.get('/adduser', function(req, res) {
-//     var user = req.query.user;
-//     var location = req.query.location;
-//     var destination = req.query.destination;
-//     var time = req.query.time;
-
-
-//     addUser(name, location, destination, time);
-// });
+});
 
 app.post('/sendData', urlencodedParser, function (req, res) {
     var name = req.body.nameData;
@@ -168,44 +134,19 @@ app.post('/getUserData', urlencodedParser, function (req, res) {
         });
 });
 
-// Gets the array of
-// function getClosestUsersTo(name) {
-//     // var doc_result = db.collection('users').doc(name).collection('dest').get();
-//     var result={};
-//     var user_data = db.collection('users').doc(name).get()
+app.post('/predict', function (req, res) {
+    // takes a source and a destination
+    // returns lat long pairs and value(heat level/# of crimes)
+    var source = req.query.source;
+    var dest = req.query.dest;
+    var file = new File('/crime_results.json');
+    var resultList = file.parseJSON();
+    resultList.forEach(filter);
 
-//     .then(doc => {
-//         if (!doc.exists) {
-//             console.log('No such document!');
-//         } else {
-//             console.log('Document data:', doc.data());
-//             // return JSON.stringify(doc.data());
-//             console.log('again',doc.data());
-//             // return JSON.stringify(doc.data());
-//             result=doc.data();
-//         }
-//     }).then(function(){
-//         return result;
-//     })
-//     .catch(err => {
-//         console.log('Error getting document', err);
-//     });
 
-//     // var closestUsers = user_data;
-//     // return closestUsers;
 
-// }
+
+});
 
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
-/****************************************************************************************/
-// // Initialize Firebase
-// var config = {
-//     apiKey: "AIzaSyAjf0slvgGxRlI5wujzu8Nsp-_SJgsmsb4",
-//     authDomain: "companion-app-e1b98.firebaseapp.com",
-//     databaseURL: "https://companion-app-e1b98.firebaseio.com",
-//     projectId: "companion-app-e1b98",
-//     storageBucket: "companion-app-e1b98.appspot.com",
-//     messagingSenderId: "843176657895"
-// };
-// firebase.initializeApp(config);
