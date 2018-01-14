@@ -80,6 +80,9 @@ app.post('/sendData',urlencodedParser,function(req,res){
 
     var lat=req.body.lat;
     var long=req.body.long;
+
+    var destLat = req.body.destLat;
+    var destLong = req.body.destLong;
     // console.log('lat',parseFloat(lat).toFixed(2));
     // console.log('longitude',parseFloat(longitude).toFixed(2));
     // var loc=new GeoPoint(longitude,lat);
@@ -91,7 +94,7 @@ app.post('/sendData',urlencodedParser,function(req,res){
     var setAda = docRef.set({
         nameData:nameData,
         loc: new firebase.firestore.GeoPoint(parseFloat(lat),parseFloat(long)),
-        destination: "destination",
+        destination: new firebase.firestore.GeoPoint(parseFloat(destLat), parseFloat(destLong)),
         time: time
     });
 
