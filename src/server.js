@@ -40,18 +40,19 @@ function addUser(name, location, destination, time) {
     });
 }
 
+// Client call for adding a user
 app.get('/adduser', function(req, res) {
-    var name = req.query.user;
+    var user = req.query.user;
     var location = req.query.location;
     var destination = req.query.destination;
     var time = req.query.time;
 
-    addUser(name, location, destination, time);
+    addUser(user, location, destination, time);
 })
 
-// Gets the array of
-function getClosestUsersTo(name) {
-    var doc = db.collection('users').doc(name).collection('closestUsers').get();
+// Gets the array of users closest to the given 'user'
+function getClosestUsersTo(user) {
+    var doc = db.collection('users').doc(user).collection('closestUsers').get();
     var closestUsers = doc.toJSON();
     return closestUsers;
 }
