@@ -11,6 +11,7 @@ from shapely.ops import transform
 import numpy as np
 import sklearn
 import tpot
+import joblib
 from sklearn.metrics import classification_report
 from sklearn.neighbors import KNeighborsRegressor
 def truncate(f, n):
@@ -52,14 +53,14 @@ max_long = float(max_point.y) + .2
 iterate = .01
 index = 0
 bar = progressbar.ProgressBar(max_value=len(np.arange(min_lat, max_lat, iterate)) * len(np.arange(min_long, max_long, iterate
-                                                                                                  )) * len(range(start_year, end_year + 1)) * len(range(12)) * len(range(7)) * len(range(24)))
+                                                                                                  )) * len(range(start_year, end_year + 1)) * len(range(12)) * len(range(7)) * len(range(2)))
 lat_long_dict = OrderedDict()
 for lat in np.arange(min_lat, max_lat, iterate):
     for longitude in np.arange(min_long, max_long, iterate):
         for year in range(start_year, end_year + 1):
             for month_group in range(12):
                 for day_of_week in range(7):
-                    for hour in range(24):
+                    for hour in range(2):
                         index += 1
                         bar.update(index)
                         lat_long_dict[float(truncate(lat, 2)), float(truncate(longitude, 2)), year, month_group, day_of_week, hour] = 0
@@ -89,6 +90,10 @@ for index, crime in enumerate(crime_file['features']):
         month = int(crime['properties']['MONTH'])
         day = crime['properties']['DAY']
         hour = int(crime['properties']['HOUR'])
+        if 6 <= hour <= 18:
+            hour = 0
+        else:
+            hour = 1
         day_of_week = datetime.datetime(year, int(month), int(day)).weekday()
         # day_of_week = 0 if day_of_week < 5 else 1
         row_offset = (year - start_year) * 12 * 7 * 24
@@ -103,18 +108,19 @@ for index, crime in enumerate(crime_file['features']):
             except KeyError:
                 pass
 #
-# print('starting training...')
-# # X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(training_arr, out_arr)
-# # regressor = KNeighborsRegressor(n_jobs=-1)
-# # regressor.fit(X_train, y_train)
-# # expected = y_test
-# # predicted = regressor.predict(X_test)
-# # print(classification_report(expected, predicted))
-# #
-print('Training')
-crime_classifier = tpot.TPOTRegressor(n_jobs=-1, verbosity=3, generations=50, population_size=50)
+print('starting training...')
 data = np.array(list(lat_long_dict.keys()))
 target = np.array(list(lat_long_dict.values()))
+# X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(data, target)
+# regressor = KNeighborsRegressor(n_jobs=-1)
+# regressor.fit(X_train, y_train)
+# expected = y_test
+# predicted = regressor.predict(X_test)
+# joblib.dump(regressor, 'k_neighbors.pkl')
+# print(classification_report(expected, predicted))
+
+print('Training')
+crime_classifier = tpot.TPOTRegressor(n_jobs=-1, verbosity=3, generations=50, population_size=50)
 crime_classifier.fit(data, target)
 crime_classifier.export('crime_predictor_classifier.py')
 
