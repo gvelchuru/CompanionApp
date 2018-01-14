@@ -77,7 +77,7 @@ app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
             // return JSON.stringify(doc.data());
             console.log('again',doc.data());
             // return JSON.stringify(doc.data());
-            result=doc.data();
+            result=doc.data()['orderedCompanions'];
             res.send(result);
         }
     }).then(function(){
