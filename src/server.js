@@ -1,8 +1,14 @@
 var firebase = require("firebase");
 require('firebase/firestore');
+var bodyParser = require('body-parser');
 const express = require('express');
 var app = express();
 
+// create application/json parser 
+var jsonParser = bodyParser.json();
+ 
+// create application/x-www-form-urlencoded parser 
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyAjf0slvgGxRlI5wujzu8Nsp-_SJgsmsb4",
@@ -47,13 +53,64 @@ app.get('/adduser', function(req, res) {
     var time = req.query.time;
 
     addUser(name, location, destination, time);
-})
+});
+
+app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
+    var name=req.body.name;
+    // console.log(req.body);
+    // console.log(name);
+    // res.send('1');
+    // var jsonresult=getClosestUsersTo(name);
+    // console.log("hello",getClosestUsersTo(name));
+    // console.log('here it is');
+    // console.log(jsonresult);
+    // res.send(jsonresult);
+    var user_data = db.collection('users').doc(name).get()
+    
+    .then(doc => {
+        if (!doc.exists) {
+            console.log('No such document!');
+        } else {
+            console.log('Document data:', doc.data());
+            // return JSON.stringify(doc.data());
+            console.log('again',doc.data());
+            // return JSON.stringify(doc.data());
+            result=doc.data();
+            res.send(result);
+        }
+    }).then(function(){
+        return result;
+    })
+    .catch(err => {
+        console.log('Error getting document', err);
+    });
+});
 
 // Gets the array of
 function getClosestUsersTo(name) {
-    var doc = db.collection('users').doc(name).collection('closestUsers').get();
-    var closestUsers = doc.toJSON();
-    return closestUsers;
+    // var doc_result = db.collection('users').doc(name).collection('dest').get();
+    var result={};
+    var user_data = db.collection('users').doc(name).get()
+    
+    .then(doc => {
+        if (!doc.exists) {
+            console.log('No such document!');
+        } else {
+            console.log('Document data:', doc.data());
+            // return JSON.stringify(doc.data());
+            console.log('again',doc.data());
+            // return JSON.stringify(doc.data());
+            result=doc.data();
+        }
+    }).then(function(){
+        return result;
+    })
+    .catch(err => {
+        console.log('Error getting document', err);
+    });
+    
+    // var closestUsers = user_data;
+    // return closestUsers;
 }
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
