@@ -87,13 +87,15 @@ app.post('/sendData',urlencodedParser,function(req,res){
     // console.log('longitude',parseFloat(longitude).toFixed(2));
     // var loc=new GeoPoint(longitude,lat);
 
+    console.log("Destination Coordinates: " + destLat + ", " + destLong)
+
     var time=req.body.time;
 
     var docRef = db.collection('users').doc(nameData);
 
     var setAda = docRef.set({
         nameData:nameData,
-        loc: new firebase.firestore.GeoPoint(parseFloat(lat),parseFloat(long)),
+        loc: new firebase.firestore.GeoPoint(parseFloat(lat), parseFloat(long)),
         destination: new firebase.firestore.GeoPoint(parseFloat(destLat), parseFloat(destLong)),
         time: time
     });
