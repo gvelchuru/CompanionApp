@@ -18,7 +18,9 @@
   "homepage": "https://github.com/gvelchuru/CompanionApp#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
-    "firebase": "^4.8.2"
+    "firebase": "^4.8.2",
+    "geopoint": "^1.0.1"
   }
 }
