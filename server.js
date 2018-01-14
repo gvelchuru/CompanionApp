@@ -7,20 +7,19 @@ var express = require('express');
 var path = require('path');
 
 
-
 var app = express();
 
 // app.engine('html', require('ejs').renderFile);
 // app.engine('html');
 
-app.use("/public",express.static(__dirname + '/public'));
-app.set('view engine','ejs');
+app.use("/public", express.static(__dirname + '/public'));
+app.set('view engine', 'ejs');
 
 // create application/json parser
 var jsonParser = bodyParser.json();
 
 // create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var urlencodedParser = bodyParser.urlencoded({extended: false});
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyAjf0slvgGxRlI5wujzu8Nsp-_SJgsmsb4",
@@ -36,7 +35,7 @@ firebase.initializeApp(config);
 var db = firebase.firestore();
 
 
-app.get('/',function(req,res){
+app.get('/', function (req, res) {
     // res.sendFile(path.join(__dirname + '/test.html'));
     res.render('index.ejs');
 })
@@ -75,11 +74,11 @@ app.get('/',function(req,res){
 //     addUser(name, location, destination, time);
 // });
 
-app.post('/sendData',urlencodedParser,function(req,res){
-    var nameData=req.body.nameData;
+app.post('/sendData', urlencodedParser, function (req, res) {
+    var name = req.body.nameData;
 
-    var lat=req.body.lat;
-    var long=req.body.long;
+    var lat = req.body.lat;
+    var long = req.body.long;
 
     var destLat = req.body.dest_lat;
     var destLong = req.body.dest_long;
@@ -89,14 +88,14 @@ app.post('/sendData',urlencodedParser,function(req,res){
 
     console.log("Destination Coordinates: " + destLat + ", " + destLong)
 
-    var time=req.body.time;
+    var time = req.body.time;
 
-    var docRef = db.collection('users').doc(nameData);
+    var docRef = db.collection('users').doc(name);
 
     var setAda = docRef.set({
-        nameData:nameData,
+        name: name,
         loc: new firebase.firestore.GeoPoint(parseFloat(lat), parseFloat(long)),
-        destination: new firebase.firestore.GeoPoint(parseFloat(destLat), parseFloat(destLong)),
+        dest: new firebase.firestore.GeoPoint(parseFloat(destLat), parseFloat(destLong)),
         time: time
     });
 
@@ -105,9 +104,9 @@ app.post('/sendData',urlencodedParser,function(req,res){
 
 });
 
-app.get('/map',function(req,res){
-    var name=req.query.name;
-    var result=null;
+app.get('/map', function (req, res) {
+    var name = req.query.name;
+    var result = null;
     // console.log(name);
     var user_data = db.collection('users').doc(name).get()
 
@@ -117,28 +116,29 @@ app.get('/map',function(req,res){
             } else {
                 console.log('Document data:', doc.data());
                 // return JSON.stringify(doc.data());
-                console.log('again',doc.data());
+                console.log('again', doc.data());
                 // return JSON.stringify(doc.data());
+
                 // result=doc.data()['orderedCompanions'];
                 result=doc.data();
                 
+
                 // res.send(result);
 
             }
-            console.log('result',result);
-            
-            res.render('map_multiple.ejs',{result:result});
+            console.log('result', result);
+
+            res.render('map_multiple.ejs', {result: result});
         })
         .catch(err => {
             console.log('Error getting document', err);
         });
 
 
-    
 });
 
-app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
-    var name=req.body.name;
+app.post('/getClosestUsersTo', urlencodedParser, function (req, res) {
+    var name = req.body.name;
     // console.log(req.body);
     // console.log(name);
     // res.send('1');
@@ -155,12 +155,12 @@ app.post('/getClosestUsersTo',urlencodedParser,function(req,res){
             } else {
                 console.log('Document data:', doc.data());
                 // return JSON.stringify(doc.data());
-                console.log('again',doc.data());
+                console.log('again', doc.data());
                 // return JSON.stringify(doc.data());
-                result=doc.data()['orderedCompanions'];
+                result = doc.data()['orderedCompanions'];
                 res.send(result);
             }
-        }).then(function(){
+        }).then(function () {
             return result;
         })
         .catch(err => {

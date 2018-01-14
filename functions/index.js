@@ -61,12 +61,15 @@ exports.createUser = functions.firestore
     .onWrite(event => {
         var list = [];
         var db = admin.firestore();
-        var newValue = event.data.data();
-        var previousValue = event.data.previous.data();
+        if (event.data.previous.exists) {
+          var newValue = event.data.data();
+          var previousValue = event.data.previous.data();
 
-        if (Object.is(newValue.loc,previousValue.loc) && Object.is(newValue.dest, previousValue.dest) && Object.is(newValue.time, previousValue.time)) {
-          return;
+          if (Object.is(newValue.loc,previousValue.loc) && Object.is(newValue.dest, previousValue.dest) && Object.is(newValue.time, previousValue.time)) {
+            return;
+          }
         }
+
 
 
         db.collection("users").get().then(function(findClose) {
@@ -75,8 +78,8 @@ exports.createUser = functions.firestore
               findClosest.forEach(function(doc) {
                 var dict = doc.data();
                 var srcDict = even.data();
-                if Object.is(srcDict.name, dict.name) {
-                  continue;
+                if (Object.is(srcDict.name, dict.name)) {
+                  return true;
                 }
                 var lat1 = srcDict["loc"].latitude;
                 var lon1 = srcDict["loc"].longitude;
@@ -112,7 +115,7 @@ exports.deleteUser = functions.firestore
           var dict = doc.data();
           var orderedCompanionss = dict["orderedCompanions"];
           orderedCompanionss.forEach(function(companion, index) {
-            if Object.is(companion["name"], deletedValue.name) {
+            if (Object.is(companion["name"], deletedValue.name)) {
               orderedCompanionss.splice(index, 1);
             }
           });
