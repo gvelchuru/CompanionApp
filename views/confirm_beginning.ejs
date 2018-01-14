@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+	div#thanks{
+	position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   font-size: 30px;
+   font-weight: bold;
+       border: 2px solid black;
+}
+.f11{
+	font-size: 17px;
+}
+
+
+</style>
+	</head>
+	<body style="width:100%;height:100%">
+		
+	<div style="background-image: url('./public/images/vancouver.jpg');opacity:0.5;width:100%;height:100%;position:absolute;">
+			
+		
+		<div id="thanks" class="panel panel-default" style="width:500px;">
+		  <div class="panel-heading">Thank you!</div>
+		  <div class="panel-body">
+		  	Your information is added into the database. Calculating... <span id="countdown">10</span>
+
+
+		  </div>
+		</div>
+
+	</div>
+	<script>
+	// $('#countdown').html("8");
+		var countdown=10;
+		setInterval(function(){
+			$('#countdown').html(countdown);
+			countdown--;
+			if(countdown==0){
+				break;
+			}
+		},1000);
+		
+	</script>
+
+	</body>
+
+</html>

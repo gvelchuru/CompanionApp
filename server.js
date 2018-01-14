@@ -40,6 +40,9 @@ app.get('/', function (req, res) {
     res.render('index.ejs');
 });
 
+
+
+
 app.post('/sendData', urlencodedParser, function (req, res) {
     var name = req.body.nameData;
 
@@ -65,7 +68,8 @@ app.post('/sendData', urlencodedParser, function (req, res) {
         time: time
     });
 
-    res.render('test.ejs')
+    // res.render('test.ejs')
+    res.render('confirm_beginning.ejs',{name:name});
     // res.render('table.ejs',{})
     // res.redirect('table?name'+name);
 
