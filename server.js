@@ -102,7 +102,41 @@ app.get('/table',function(req,res){
 });
 
 app.get('/confirm',function(req,res){
-    res.render('confirm.ejs');
+    var name = req.query.name;
+    var index =req.query.index;
+    var result = null;
+    var individual=null;
+    // console.log(name);
+    var user_data = db.collection('users').doc(name).get()
+
+        .then(doc => {
+            if (!doc.exists) {
+                console.log('No such document!');
+            } else {
+                console.log('Document data:', doc.data());
+                // return JSON.stringify(doc.data());
+                console.log('again', doc.data());
+                // return JSON.stringify(doc.data());
+
+                // result=doc.data()['orderedCompanions'];
+                result=doc.data();
+
+                individual=result.orderedCompanions[index];
+
+                // res.send(result);
+
+            }
+            console.log('result', result);
+            console.log('individual',individual);
+            // res.render('confirm.ejs');
+            res.render('confirm.ejs', {result: result,individual:individual});
+        })
+        .catch(err => {
+            console.log('Error getting document', err);
+        });
+
+
+    
 });
 
 app.get('/map', function (req, res) {
