@@ -119,7 +119,8 @@ app.get('/map',function(req,res){
                 // return JSON.stringify(doc.data());
                 console.log('again',doc.data());
                 // return JSON.stringify(doc.data());
-                result=doc.data()['orderedCompanions'];
+                // result=doc.data()['orderedCompanions'];
+                result=doc.data();
                 
                 // res.send(result);
 

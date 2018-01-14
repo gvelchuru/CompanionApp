@@ -288,34 +288,35 @@
 					    
 					    function init() {
 							var input = document.getElementById('pac-input');
-							 var autocomplete = new google.maps.places.Autocomplete(input);
-//							var searchBox = new google.maps.places.SearchBox(input);
+							 // var autocomplete = new google.maps.places.Autocomplete(input);
+							var searchBox = new google.maps.places.SearchBox(input);
 
-							autocomplete.addListener('place_changed', function() {
+							searchBox.addListener('place_changed', function() {
+                alert('asdf');
 
-								alert('hello');
-								var place = autocomplete.getPlace();
-								console.log('place: ' + place);
-								var lat=places.geometry.location.lat();
-								var lon=places.geometry.location.lng();
-                                $('#dest_lat').val(lat);
-                                $('#dest_long').val(lon);
-                                console.log(lat);
-                                console.log(lon);
-
-//							 	places.forEach(function(place){
-//							 		if (!place.geometry) {
-//						              console.log("Returned place contains no geometry");
-//						              return;
-//						            }
-//						            console.log(place.geometry.location);
-//						            var lat=place.geometry.location.lat();
-//							 		var lon=place.geometry.location.lng();
-//							 		console.log('lat', lat);
-//							 		console.log('lon', lon);
-//                  					$('#dest_lat').val(lat);
-//                  					$('#dest_long').val(lon);
-//							 	});
+								// alert('hello');
+								// var place = autocomplete.getPlace();
+								// console.log('place: ' + place);
+								// var lat=places.geometry.location.lat();
+								// var lon=places.geometry.location.lng();
+        //         $('#dest_lat').val(lat);
+        //         $('#dest_long').val(lon);
+        //         console.log(lat);
+        //         console.log(lon);
+                var places = searchBox.getPlaces();
+							 	places.forEach(function(place){
+							 		if (!place.geometry) {
+						              console.log("Returned place contains no geometry");
+						              return;
+						      }
+			            console.log(place.geometry.location);
+			            var lat=place.geometry.location.lat();
+						 		  var lon=place.geometry.location.lng();
+						 		  console.log('lat', lat);
+							 		classonsole.log('lon', lon);
+         					$('#dest_lat').val(lat);
+         					$('#dest_long').val(lon);
+							 	});
 							 	
 							});
 							
