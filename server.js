@@ -87,7 +87,7 @@ app.get('/map', function (req, res) {
 
                 // result=doc.data()['orderedCompanions'];
                 result=doc.data();
-                
+
 
                 // res.send(result);
 
@@ -134,18 +134,26 @@ app.post('/getUserData', urlencodedParser, function (req, res) {
         });
 });
 
-app.post('/predict', function (req, res) {
+app.post('/filter', function (req, res) {
     // takes a source and a destination
     // returns lat long pairs and value(heat level/# of crimes)
     var source = req.query.source;
     var dest = req.query.dest;
+    var min_lat = Math.min(source.latitude, dest.latitude);
+    var max_lat = Math.max(source.latitude, dest.latitude);
+    var min_long = Math.min(source.longitude, dest.longitude);
+    var max_long = Math.max(source.longitude, dest.longitude);
     var file = new File('/crime_results.json');
     var resultList = file.parseJSON();
-    resultList.forEach(filter);
-
-
-
-
+    result_lat_longs = [];
+    resultList.forEach(function(result) {
+      if ((min_lat <= result[0]) && (result[0] <= max_lat) && (min_long <= result[1]) && (result[1] <= max_long)){
+          for (i = 0; i < result[2]; i++) {
+            result_lat_longs.push([result[0], result[1]]);
+          }
+      }
+    });
+    res.send(result_lat_longs);
 });
 
 
