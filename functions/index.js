@@ -103,6 +103,26 @@ exports.createUser = functions.firestore
         });
     });
 
+exports.deleteUser = functions.firestore
+  .document('users/{userId}')
+  .onDelete(event => {
+    var deletedValue = event.data.previous.data();
+    db.collection("users").get().then(function(deleteBuddy) {
+        deleteBuddy.forEach(function(doc) {
+          var dict = doc.data();
+          var orderedCompanionss = dict["orderedCompanions"];
+          orderedCompanionss.forEach(function(companion, index) {
+            if Object.is(companion["name"], deletedValue.name) {
+              orderedCompanionss.splice(index, 1);
+            }
+          });
+          db.collection("users").doc(doc.id).set({
+            orderedCompanions : orderedCompanionss,
+          }, {merge: true});
+        });
+    });
+  });
+
 
 function BuddySort(first, second)
 {
