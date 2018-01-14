@@ -1,4 +1,7 @@
 var firebase = require("firebase");
+require('firebase/firestore');
+const express = require('express');
+var epp = express();
 
 // Initialize Firebase
 var config = {
@@ -11,6 +14,23 @@ firebase.initializeApp(config);
 
 var db = firebase.firestore();
 
+function addUser(name, location, destination, time) {
+    var docRef = db.collection('users').doc(name);
+
+    var setAda = docRef.set({
+        location: location,
+        destination: destination,
+        time: time
+    });
+}
+
+function getClosestUsersTo(name) {
+    var doc = db.collection('users').doc(name).collection('closestUsers').get();
+    var closestUsers = doc.toJSON();
+    return closestUsers;
+}
+
+app.listen(3000, () => console.log('Example app listening on port 3000'))
 /****************************************************************************************/
 // // Initialize Firebase
 // var config = {
