@@ -113,8 +113,7 @@ function getClosestUsersTo(name) {
     
     // var closestUsers = user_data;
     // return closestUsers;
-
-})
+}
 
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
