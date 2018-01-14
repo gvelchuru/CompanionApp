@@ -1,5 +1,5 @@
-var firebase = require("firebase");
 require('firebase/firestore');
+var firebase = require("firebase");
 var bodyParser = require('body-parser');
 const express = require('express');
 var app = express();
