@@ -27,7 +27,6 @@ app.get('/',function(req,res){
     .catch((err) => {
         console.log('Error getting documents', err);
     });
-
 })
 
 // Adds a user to the database
@@ -40,6 +39,15 @@ function addUser(name, location, destination, time) {
         time: time
     });
 }
+
+app.get('/adduser', function(req, res) {
+    var name = req.query.user;
+    var location = req.query.location;
+    var destination = req.query.destination;
+    var time = req.query.time;
+
+    addUser(name, location, destination, time);
+})
 
 // Gets the array of
 function getClosestUsersTo(name) {
